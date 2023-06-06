@@ -2,8 +2,12 @@ import { useState } from "react"
 import { Button, StyleSheet, Text, TextInput, View, Alert } from "react-native"
 
 const data = [
-	{ id: 1, name: "ritik" },
-	{ id: 2, name: "maroof" },
+	{
+		id: 1,
+		name: "maroof",
+		age: 21,
+		about: "lorem ipsum hjfdbkgkjdbfgjkdbgjkbdkjbgjkbkjdbkjgbkjdbgd",
+	},
 ]
 
 export default function App() {
@@ -12,35 +16,54 @@ export default function App() {
 
 	const addPerson = () => {
 		let id = new Date()
-		if (person == 0) {
+
+		if (!person) {
 			Alert.alert("please enter something")
 			return
 		}
-		const newPersons = [...persons, { id, name: person }]
+		const newPersons = [...persons, { ...person, id }]
 		setPersons(newPersons)
 	}
 
 	return (
 		<View style={styles.container}>
-			<TextInput
-				style={styles.textInput}
-				placeholder="type something here..."
-				onChangeText={(newText) => setPerson(newText)}
-			/>
-			<View style={styles.btn}>
-				<Button
-					color="#cf1fa9"
-					title="add person"
-					onPress={() => addPerson()}
+			<View>
+				<TextInput
+					keyboardType="default"
+					style={styles.textInput}
+					placeholder="name"
+					onChangeText={(name) => setPerson({ ...person, name })}
 				/>
+				<TextInput
+					keyboardType="numeric"
+					style={styles.textInput}
+					placeholder="age"
+					onChangeText={(age) => setPerson({ ...person, age })}
+				/>
+				<TextInput
+					keyboardType="default"
+					style={styles.textInput}
+					placeholder="tell us something about yourself"
+					onChangeText={(about) => setPerson({ ...person, about })}
+				/>
+				<View style={styles.btn}>
+					<Button
+						color="#cf1fa9"
+						title="add person"
+						onPress={() => addPerson()}
+					/>
+				</View>
 			</View>
 			<View style={styles.textContainer}>
 				{persons.map((p) => {
-					const { name, id } = p
+					const { name, id, age, about } = p
 					return (
-						<Text style={styles.text} key={id}>
-							{name}
-						</Text>
+						<View key={id} style={styles.text}>
+							<Text>{name}</Text>
+							<Text>{age}</Text>
+							<Text>{about}</Text>
+							<Button title="remove" />
+						</View>
 					)
 				})}
 			</View>
@@ -53,11 +76,12 @@ const styles = StyleSheet.create({
 		flex: 1,
 		backgroundColor: "#c3cdde",
 		alignItems: "center",
-		justifyContent: "center",
+		// justifyContent: "center",
+		paddingTop: 50,
 	},
 	textInput: {
 		backgroundColor: "#ffa500",
-		padding: 10,
+		padding: 5,
 		borderWidth: 5,
 		borderRadius: 10,
 		borderColor: "#ffa500",
